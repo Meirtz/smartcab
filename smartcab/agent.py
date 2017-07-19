@@ -75,7 +75,7 @@ class LearningAgent(Agent):
             else:
                 return str(s)
         #state = (waypoint, inputs, deadline)
-        state = None_to_str(waypoint) + "_" + inputs['light'] + "_" + None_to_str(inputs['left']) + "_" + None_to_str(inputs['right']) + "_"+  None_to_str(inputs['oncoming'])
+        state = (None_to_str(waypoint), inputs['light'], None_to_str(inputs['left']), None_to_str(inputs['right']), None_to_str(inputs['oncoming'])) #None_to_str(waypoint) + "_" + inputs['light'] + "_" + None_to_str(inputs['left']) + "_" + None_to_str(inputs['right']) + "_"+  None_to_str(inputs['oncoming'])
 
         return state
 
@@ -144,12 +144,15 @@ class LearningAgent(Agent):
             if self.epsilon > 0.01 and self.epsilon > random.random():
                 action = random.choice(self.valid_actions)
             else:
+                
                 valid_actions = [] # deal with multiple actions with maxQ
                 maxQ = self.get_maxQ(state)
                 for act in self.Q[state]:
                     if maxQ == self.Q[state][act]:
                         valid_actions.append(act)
                 action = random.choice(valid_actions)
+                
+                #action = [action for action, q_value in self.Q[state].values() if maxQ == q_value] 
         return action
 
 
