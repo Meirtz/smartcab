@@ -69,13 +69,15 @@ class LearningAgent(Agent):
         ###########
         # Set 'state' as a tuple of relevant data for the agent 
         
+        '''
         def None_to_str(s):
             if s is None:
                 return 'None'
             else:
                 return str(s)
+        '''
         #state = (waypoint, inputs, deadline)
-        state = (None_to_str(waypoint), inputs['light'], None_to_str(inputs['left']), None_to_str(inputs['right']), None_to_str(inputs['oncoming'])) #None_to_str(waypoint) + "_" + inputs['light'] + "_" + None_to_str(inputs['left']) + "_" + None_to_str(inputs['right']) + "_"+  None_to_str(inputs['oncoming'])
+        state = (waypoint, inputs['light'], inputs['left'], inputs['right'], inputs['oncoming']) #None_to_str(waypoint) + "_" + inputs['light'] + "_" + None_to_str(inputs['left']) + "_" + None_to_str(inputs['right']) + "_"+  None_to_str(inputs['oncoming'])
 
         return state
 
@@ -89,10 +91,7 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        maxQ = -9999.0
-        for action in self.Q[state]:
-            if maxQ < self.Q[state][action]:
-                maxQ = self.Q[state][action]
+        maxQ = max(self.Q[state].values())
 
         return maxQ 
 
@@ -116,7 +115,8 @@ class LearningAgent(Agent):
                 #for action in self.valid_actions:
                     #self.Q[state].update(action=0.0)
                 #self.Q.update({state:{None:0.0, 'forward':0.0, 'left':0.0, 'right':0.0}})
-                self.Q[state] = self.Q.get(state, {None:0.0, 'forward':0.0, 'left':0.0, 'right':0.0})
+                #self.Q[state] = self.Q.get(state, {None:0.0, 'forward':0.0, 'left':0.0, 'right':0.0})
+                self.Q.setdefault(state, {action: 0.0 for action in self.valid_actions})
             
         
         return
@@ -147,12 +147,16 @@ class LearningAgent(Agent):
                 
                 valid_actions = [] # deal with multiple actions with maxQ
                 maxQ = self.get_maxQ(state)
+                
                 for act in self.Q[state]:
                     if maxQ == self.Q[state][act]:
                         valid_actions.append(act)
                 action = random.choice(valid_actions)
-                
-                #action = [action for action, q_value in self.Q[state].values() if maxQ == q_value] 
+                '''
+                action = 'None'
+                action = [action for action, q_value in self.Q[state].iteritems() if maxQ == q_value] 
+                print("action", action)
+                '''
         return action
 
 
