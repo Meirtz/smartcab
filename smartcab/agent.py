@@ -3,6 +3,7 @@ import math
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
+random.seed(2333)
 
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
@@ -25,7 +26,7 @@ class LearningAgent(Agent):
         # Set any additional class parameters as needed
         #self.tolerance = 0.05
         self.t = 0
-        random.seed(2333)
+        
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -208,7 +209,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, alpha=0.1)
+    agent = env.create_agent(LearningAgent, learning=True, alpha=0.4)
     
     ##############
     # Follow the driving agent
